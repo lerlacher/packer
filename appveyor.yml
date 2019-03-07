@@ -4,10 +4,6 @@ version: "{build}"
 
 skip_tags: true
 
-branches:
-  only:
-    - master
-
 os: Windows Server 2012 R2
 
 environment:
@@ -25,6 +21,7 @@ install:
 build_script:
   - git rev-parse HEAD
  # go test $(go list ./... | grep -v vendor)
+  - ps: go.exe build
   - ps: |
       go.exe test -timeout=2m (go.exe list ./... `
       |? { -not $_.Contains('/vendor/') } `
@@ -35,3 +32,6 @@ build_script:
 test: off
 
 deploy: off
+
+artifacts:
+  - path: 'pkg\**'
